@@ -22,13 +22,12 @@ public class Server {
         // 配置为非阻塞
         serverSocketChannel.configureBlocking(false);
         // 绑定 Server port
-        serverSocketChannel.socket().bind(new InetSocketAddress("127.0.0.1", 8080));
+        serverSocketChannel.socket().bind(new InetSocketAddress("127.0.0.1", 9999));
         // 创建 Selector
         selector = Selector.open();
         // 注册 Server Socket Channel 到 Selector
         serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
-        System.out.println("Server 启动完成");
-
+        System.out.println("Server 启动完成。。。");
         handleKeys();
     }
 
@@ -39,7 +38,6 @@ public class Server {
             if (selectNums == 0) {
                 continue;
             }
-
             // 遍历可选择的 Channel 的 SelectionKey 集合
             Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
             while (iterator.hasNext()) {
@@ -74,40 +72,36 @@ public class Server {
 
     private void handleReadableKey(SelectionKey key) throws IOException {
         SocketChannel clientSocketChannel = (SocketChannel) key.channel();
-        // 读取数据
-        ByteBuffer readBuffer = receive(clientSocketChannel);
-
-        // 处理连接已经断开的情况，这里为了模拟没有关闭socket
-        if (readBuffer == null) {
-            System.out.println("断开 Channel");
-//            clientSocketChannel.register(selector, 0);
-//            return;
+        // 读取数据，此时可能读取到EOF，为了模拟异常，接着发送数据
+        ByteBuffer readBuffer = ByteBuffer.allocate(1024);
+        try {
+            int count = clientSocketChannel.read(readBuffer);
+            if (count == -1) {
+                // 1。首先对方close会读到EOF
+                System.out.println("读取到EOF。。。");
+                // 2。接着发送数据，对端会发回RST
+                send(clientSocketChannel, "abc。。。");
+                System.out.println("写入数据：" + "abc。。。");
+                return;
+            }
+        } catch (IOException e) {
+            // 如果继续读会发生connection reset by peer
+            e.printStackTrace();
+            // 3。如果继续写数据就会出现broken pipe
+            send(clientSocketChannel, "def。。。");
+            System.out.println("写入数据：" + "def。。。");
+            // 停止接受这个channel的事件
+            clientSocketChannel.register(selector, 0);
+            return;
         }
-        // 打印数据
+        // 正常接受数据，打印数据
         if (readBuffer != null && readBuffer.position() > 0) { // 写入模式下，
             String content = CodecUtil.newString(readBuffer);
             System.out.println("读取数据：" + content);
         }
-
-        send(clientSocketChannel, "abc。。。");
-        System.out.println("写入数据：" + "abc。。。");
-        // 再写一次数据
-//        CodecUtil.write(clientSocketChannel, "efg。。。");
-//        System.out.println("写入数据：" + "efg。。。");
     }
 
-    private ByteBuffer receive(SocketChannel channel) {
-        ByteBuffer readBuffer = ByteBuffer.allocate(1024);
-        try {
-            int count = channel.read(readBuffer);
-            if (count == -1) {
-                return null;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return readBuffer;
-    }
+
 
     private void send(SocketChannel channel, String content) {
         // 写入 Buffer
@@ -123,11 +117,28 @@ public class Server {
             // 注意，不考虑写入超过 Channel 缓存区上限。
             channel.write(buffer);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
+    /**
+     *
+     * 17:32:39.676522 IP localhost.53755 > localhost.distinct: Flags [S], seq 4020747160, win 65535, options [mss 16344,nop,wscale 6,nop,nop,TS val 778751629 ecr 0,sackOK,eol], length 0
+     * 17:32:39.676686 IP localhost.distinct > localhost.53755: Flags [S.], seq 2908853130, ack 4020747161, win 65535, options [mss 16344,nop,wscale 6,nop,nop,TS val 778751629 ecr 778751629,sackOK,eol], length 0
+     * 17:32:39.676710 IP localhost.53755 > localhost.distinct: Flags [.], ack 1, win 6379, options [nop,nop,TS val 778751629 ecr 778751629], length 0
+     * 17:32:39.676728 IP localhost.distinct > localhost.53755: Flags [.], ack 1, win 6379, options [nop,nop,TS val 778751629 ecr 778751629], length 0
+     *
+     * // -------客户端close后，向服务端发送FIN。
+     * 17:32:44.705387 IP localhost.53755 > localhost.distinct: Flags [F.], seq 1, ack 1, win 6379, options [nop,nop,TS val 778756642 ecr 778751629], length 0
+     * 17:32:44.705419 IP localhost.distinct > localhost.53755: Flags [.], ack 2, win 6379, options [nop,nop,TS val 778756642 ecr 778756642], length 0
+     *
+     * // 收到客户端的FIN后，仍然向客户端发送数据
+     * 17:32:44.710615 IP localhost.distinct > localhost.53755: Flags [P.], seq 1:13, ack 2, win 6379, options [nop,nop,TS val 778756646 ecr 778756642], length 12
+     *
+     * // 客户端的操作系统负责发回RST，因为所属的socket已经关闭了
+     * 17:32:44.710646 IP localhost.53755 > localhost.distinct: Flags [R], seq 4020747162, win 0, length 0
+     */
     public static void main(String[] args) throws IOException {
-        Server server = new Server();
+        new Server();
     }
 }

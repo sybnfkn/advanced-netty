@@ -1,4 +1,4 @@
-package com.zhangyan.nio.exception;
+package com.zhangyan.nio.fourwaves;
 
 import com.zhangyan.nio.util.CodecUtil;
 
@@ -141,8 +141,7 @@ public class Client {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         Client client = new Client();
-//        client.send("client say byebye...");
-        Thread.sleep(5000);
-        client.close(); // 不管是主动关闭还是kill掉进程，都会发送给对象FIN指令
+        // 客户端关闭，发送FIN
+        client.clientSocketChannel.close();
     }
 }
