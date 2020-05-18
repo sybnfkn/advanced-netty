@@ -1,10 +1,14 @@
 package com.zhangyan.nio.exception;
 
 import com.zhangyan.nio.util.CodecUtil;
+import sun.nio.ch.sctp.SctpStdSocketOption;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
+import java.net.SocketOption;
+import java.net.SocketOptions;
+import java.net.StandardSocketOptions;
 import java.nio.ByteBuffer;
 import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SelectionKey;
@@ -24,6 +28,7 @@ public class Client {
         clientSocketChannel = SocketChannel.open();
         // 配置为非阻塞
         clientSocketChannel.configureBlocking(false);
+        clientSocketChannel.setOption(StandardSocketOptions.SO_LINGER, 0);
         // 创建 Selector
         selector = Selector.open();
         // 注册 Server Socket Channel 到 Selector
