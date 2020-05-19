@@ -23,18 +23,42 @@ public class Server {
 
         while (true) {
             Socket socket = serverSocket.accept();
-            InputStream input = socket.getInputStream();
-            OutputStream outputStream = socket.getOutputStream();
-            ByteArrayOutputStream output = new ByteArrayOutputStream();
-            byte[] buffer = new byte[1];
-            int length;
-            // 正常会阻塞这里，对端close后返回 -1 EOF
-            while ((length = input.read(buffer)) != -1) {
-                output.write(buffer, 0, length);
+            new Thread(new Task(socket)).start();
+        }
+    }
+
+
+    static class Task implements Runnable {
+        private Socket socket;
+
+        public Task(Socket socket) {
+            this.socket = socket;
+        }
+        @Override
+        public void run() {
+            try {
+                InputStream input = socket.getInputStream();
+                OutputStream outputStream = socket.getOutputStream();
+                ByteArrayOutputStream output = new ByteArrayOutputStream();
+                byte[] buffer = new byte[1];
+                int length;
+                // 正常会阻塞这里，对端close后返回 -1 EOF
+                while ((length = input.read(buffer)) != -1) {
+                    // 请求结尾标示
+                    if (buffer[0] == '\n') {
+                        // 模拟后端业务处理
+                        String req = new String(output.toByteArray(), "utf-8");
+                        System.out.println(req);
+                    } else {
+                        output.write(buffer, 0, length);
+                    }
+                }
+
+                socket.close();
+            } catch (Exception e) {
+
             }
-            String req = new String(output.toByteArray(), "utf-8");
-            System.out.println(req.length());
-            socket.close();
+
         }
     }
 }

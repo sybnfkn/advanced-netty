@@ -30,9 +30,10 @@ public class Client {
 
         OutputStream output = socket.getOutputStream();
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < 10000; i++) {
-            sb.append("hel");
+        for (int i = 0; i < 10; i++) {
+            sb.append("abc");
         }
+        sb.append('\n');
         byte[] request = sb.toString().getBytes("utf-8");
         output.write(request);
         long start = System.currentTimeMillis();
