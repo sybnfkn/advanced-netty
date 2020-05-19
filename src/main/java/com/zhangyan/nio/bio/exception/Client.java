@@ -1,4 +1,4 @@
-package com.zhangyan.nio.bio.so_linger;
+package com.zhangyan.nio.bio.exception;
 
 import java.io.OutputStream;
 import java.net.InetSocketAddress;

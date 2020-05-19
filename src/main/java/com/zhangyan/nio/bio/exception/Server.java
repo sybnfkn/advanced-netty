@@ -1,6 +1,4 @@
-package com.zhangyan.nio.bio.so_linger;
-
-import com.sun.scenario.effect.impl.sw.java.JSWBlend_SRC_OUTPeer;
+package com.zhangyan.nio.bio.exception;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -55,9 +53,31 @@ public class Server {
                         output.write(buffer, 0, length);
                     }
                 }
-                // 收到EOF后，然后断开连接s
-//                outputStream.write(123);
+                // 收到EOF之后，再次write
+                outputStream.write(99);
+                try {
+                    int read = input.read(buffer);
+                }catch (Exception e) {
+                    // 理论应该RST，但是底层源码直接eof标示返回-1，但是对端tcp包过来是RST。
+                    e.printStackTrace();
+                }
+                // 收到rst后再次write
+                try {
+                    outputStream.write(100);
+                } catch (Exception e) {
+                    // broken pipe异常
+                    e.printStackTrace();
+                }
+
                 socket.close();
+
+                // 关闭连接之后read
+                try {
+                    outputStream.write(200);
+                } catch (Exception e) {
+                    // close异常
+                    e.printStackTrace();
+                }
             } catch (Exception e) {
 
             }
