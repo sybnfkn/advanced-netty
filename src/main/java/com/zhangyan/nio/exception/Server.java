@@ -22,7 +22,7 @@ public class Server {
         // 配置为非阻塞
         serverSocketChannel.configureBlocking(false);
         // 绑定 Server port
-        serverSocketChannel.socket().bind(new InetSocketAddress("127.0.0.1", 9999));
+        serverSocketChannel.socket().bind(new InetSocketAddress("127.0.0.1", 8080));
         // 创建 Selector
         selector = Selector.open();
         // 注册 Server Socket Channel 到 Selector

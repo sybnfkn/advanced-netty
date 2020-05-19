@@ -28,13 +28,13 @@ public class Client {
         clientSocketChannel = SocketChannel.open();
         // 配置为非阻塞
         clientSocketChannel.configureBlocking(false);
-        clientSocketChannel.setOption(StandardSocketOptions.SO_LINGER, 0);
+        clientSocketChannel.setOption(StandardSocketOptions.SO_LINGER, 1);
         // 创建 Selector
         selector = Selector.open();
         // 注册 Server Socket Channel 到 Selector
         clientSocketChannel.register(selector, SelectionKey.OP_CONNECT);
         // 连接服务器
-        clientSocketChannel.connect(new InetSocketAddress("127.0.0.1", 9999));
+        clientSocketChannel.connect(new InetSocketAddress("127.0.0.1", 8080));
 
         new Thread(new Runnable() {
             @Override
@@ -147,7 +147,7 @@ public class Client {
     public static void main(String[] args) throws IOException, InterruptedException {
         Client client = new Client();
 //        client.send("client say byebye...");
-        Thread.sleep(5000);
+//        Thread.sleep(5000);
         client.close(); // 不管是主动关闭还是kill掉进程，都会发送给对象FIN指令
     }
 }
