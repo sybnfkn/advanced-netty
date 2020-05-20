@@ -1,6 +1,4 @@
-package com.zhangyan.nio.bio.so_linger;
-
-import com.sun.scenario.effect.impl.sw.java.JSWBlend_SRC_OUTPeer;
+package com.zhangyan.bio.so_linger;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;

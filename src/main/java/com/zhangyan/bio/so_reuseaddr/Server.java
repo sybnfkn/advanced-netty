@@ -1,4 +1,4 @@
-package com.zhangyan.nio.bio.so_reuseaddr;
+package com.zhangyan.bio.so_reuseaddr;
 
 import java.io.IOException;
 import java.io.OutputStream;

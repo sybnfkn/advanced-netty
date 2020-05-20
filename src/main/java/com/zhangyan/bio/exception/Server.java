@@ -1,4 +1,4 @@
-package com.zhangyan.nio.bio.exception;
+package com.zhangyan.bio.exception;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
