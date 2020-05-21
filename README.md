@@ -12,6 +12,8 @@
 
   ###### 1）[模拟异常代码](https://github.com/sybnfkn/advanced-netty/tree/master/src/main/java/com/zhangyan/bio/rst)
 
+  ###### 2）异常堆栈
+
   ```java
   java.net.SocketException: Connection reset
   	at java.net.SocketInputStream.read(SocketInputStream.java:210)
@@ -21,11 +23,11 @@
   	at java.lang.Thread.run(Thread.java:748)
   ```
 
-  ###### 2）异常产生的原因：
+  ###### 3）异常产生的原因：
 
+  
 
-
-###### 		3）tcpdump抓包数据：
+  ###### 4）tcpdump抓包数据：
 
 ```java
 10:35:47.911281 IP localhost.58787 > localhost.http-alt: Flags [S], seq 4085467106, win 65535, options [mss 16344,nop,wscale 6,nop,nop,TS val 223620011 ecr 0,sackOK,eol], length 0
@@ -48,7 +50,7 @@
 
   ###### 1）[模拟异常代码](https://github.com/sybnfkn/advanced-netty/tree/master/src/main/java/com/zhangyan/bio/broken)
 
-  ###### 2）异常：
+  ###### 2）异常堆栈：
 
   ```java
   java.net.SocketException: Broken pipe (Write failed)
@@ -63,7 +65,7 @@
 
   
 
-###### 	  4）tcpdump抓包数据：
+  ###### 4）tcpdump抓包数据：
 
 ```java
 10:44:56.785054 IP localhost.58951 > localhost.http-alt: Flags [S], seq 3781600995, win 65535, options [mss 16344,nop,wscale 6,nop,nop,TS val 224167340 ecr 0,sackOK,eol], length 0
@@ -87,7 +89,7 @@
 
   
 
-###### 	   2）tcpdump抓包数据：
+  ###### 2）tcpdump抓包数据：
 
 ```java
 10:09:11.138687 IP localhost.58450 > localhost.http-alt: Flags [S], seq 2536016985, win 65535, options [mss 16344,nop,wscale 6,nop,nop,TS val 222027782 ecr 0,sackOK,eol], length 0
