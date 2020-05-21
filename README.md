@@ -3,7 +3,7 @@
 
 - ###### Connection reset
 
-  [案例代码](https://github.com/sybnfkn/advanced-netty/tree/master/src/main/java/com/zhangyan/bio/rst)
+  [模拟异常代码](https://github.com/sybnfkn/advanced-netty/tree/master/src/main/java/com/zhangyan/bio/rst)
 
   ```java
   java.net.SocketException: Connection reset
@@ -16,7 +16,7 @@
 
 - ###### Broken pipe
 
-  
+  [模拟异常代码](https://github.com/sybnfkn/advanced-netty/tree/master/src/main/java/com/zhangyan/bio/broken)
 
   ```java
   java.net.SocketException: Broken pipe (Write failed)
@@ -27,17 +27,23 @@
   	at java.lang.Thread.run(Thread.java:748)
   ```
 
-  
-
 - ###### EOF（不算一种异常）
 
-  
+  [模拟场景的代码](https://github.com/sybnfkn/advanced-netty/tree/master/src/main/java/com/zhangyan/bio/eof)
 
-  
 
-- #### 
 
 #### （2）常见socket参数。
+
+- ###### SO_REUSEADDR
+
+  [示例代码](https://github.com/sybnfkn/advanced-netty/tree/master/src/main/java/com/zhangyan/bio/so_reuseaddr)
+
+- ###### SO_LINGER
+
+  [示例代码](https://github.com/sybnfkn/advanced-netty/tree/master/src/main/java/com/zhangyan/bio/so_linger)
+
+
 
 #### （3）backlog案例。
 
@@ -47,10 +53,6 @@
 
 # 2.nio
 ####   （1）完整的nio案例。
-
-####   （2）
-
-####   （3）
 
 # 3.netty
 ####   （1）完整的netty案例。
