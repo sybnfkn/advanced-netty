@@ -1,37 +1,38 @@
 package com.zhangyan.bio.rst;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.concurrent.TimeUnit;
+import java.net.SocketAddress;
 
+/**
+ * Created with IntelliJ IDEA.
+ *
+ * @Auther: Messi
+ * @Date: 2020/05/18/7:44 下午
+ * @Description:
+ */
 public class Client {
+    private static int PORT = 8080;
+    private static String HOST = "127.0.0.1";
+
     public static void main(String[] args) throws Exception {
         Socket socket = new Socket();
-        socket.connect(new InetSocketAddress("127.0.0.1", 9999));
+//        socket.setTcpNoDelay(true);
 
-        OutputStream out = socket.getOutputStream();
+        SocketAddress address = new InetSocketAddress(HOST, PORT);
+        socket.connect(address);
 
-        System.out.println("start sleep. kill server process now!");
-
-        // 这个时候 kill 掉服务端进程
-        TimeUnit.SECONDS.sleep(10);
-
-        System.out.println("start first write");
-        // 第一次 write, 触发 RST
-        out.write("hello".getBytes());
-
-        TimeUnit.SECONDS.sleep(2);
-        System.out.println("start second write");
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        String line = reader.readLine();
-        System.out.println(line);
-        // 第二次 write, 触发 Broken Pipe
-//        out.write("world".getBytes());
-
-        System.in.read();
+        InputStream inputStream = socket.getInputStream();
+        byte[] buffer = new byte[1];
+        int result = 0;
+        while ((result = inputStream.read(buffer)) != -1) {
+            if (buffer[0] == '\n') {
+                socket.close();
+                break;
+            }
+        }
+        System.out.println("end........");
     }
 }
