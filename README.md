@@ -3,7 +3,7 @@
 
 - ###### Connection reset
 
-  [案例代码]: https://github.com/sybnfkn/advanced-netty/tree/master/src/main/java/com/zhangyan/bio/rst
+  [案例代码](https://github.com/sybnfkn/advanced-netty/tree/master/src/main/java/com/zhangyan/bio/rst)
 
   ```java
   java.net.SocketException: Connection reset
