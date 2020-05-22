@@ -25,9 +25,13 @@
 
   - 到不存在端口连接请求。
 
+  ![clipboard](/Users/zhangyan17/IdeaProjects/test/advanced-netty/image/clipboard.png)
+  
   - 异常释放一个连接。
   
     正常情况终止连接一方会发送FIN，称为有序释放，正常情况不会有数据丢失。但是有时异常释放，会直接发送一个RST而不是FIN。
+  
+    ![clipboard2](/Users/zhangyan17/IdeaProjects/test/advanced-netty/image/clipboard2.png)
   
   - 检测半打开连接。
   
@@ -38,6 +42,8 @@
     此时服务端可能会有很多半打开连接，此时就需要依赖tcp的keepalive或者应用层心跳。如果心跳包到达客户机她不知道报文段中连接。tcp原则就是以RST作为应答。
   
     理论上我们收到FIN正确做法就是close，但是如果我们此时继续write，write到对端，对端就会发回RST。
+  
+    ![clipboard3](/Users/zhangyan17/IdeaProjects/test/advanced-netty/image/clipboard3.png)
   
   ###### 4）tcpdump抓包数据：
 
