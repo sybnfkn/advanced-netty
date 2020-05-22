@@ -29,7 +29,7 @@ typora-copy-images-to: ./image
 
   - 到不存在端口连接请求。
 
-  ![clipboard](./image/clipboard.png)
+  ![img](https:////note.youdao.com/src/C5F183B6A5904C5F80BCBC872DEBF8C0)
   
   - 异常释放一个连接。
   
