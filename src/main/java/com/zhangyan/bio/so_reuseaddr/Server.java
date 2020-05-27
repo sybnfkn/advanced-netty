@@ -22,7 +22,7 @@ public class Server {
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = new ServerSocket();
         // setReuseAddress 必须在 bind 函数调用之前执行
-        serverSocket.setReuseAddress(false);
+//        serverSocket.setReuseAddress(false);
         serverSocket.bind(new InetSocketAddress(8080));
         System.out.println("reuse address: " + serverSocket.getReuseAddress());
         while (true) {
